@@ -1,0 +1,18 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: lp
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/design?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=GMT%2B8
+    username: root
+    password: loginpass
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+
+mybatis-plus:
+  type-aliases-package: com.lp.entity
