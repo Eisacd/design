@@ -33,20 +33,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
 
     @Override
     public Result sendCode(String phone , HttpSession session) {
-        System.out.println("----");
+        //1.手机号作为key 验证码作为value 形成缓存
+
+
+        //2.向电话发送信息 携带验证码
+
         return Result.ok();
     }
 
     /**
-     * @description 用于人员登录登录
+     * @description 电话为账号 用密码登录
      *
      * @param loginFormDTO
      * @param session
-     * @return Result 返回 true or false
+     * @return  true or false
      */
 
     @Override
-    public Result login(LoginFormDTO loginFormDTO, HttpSession session) {
-        return Result.fail("未实现 , 时间 : ");
+    public Result loginByPassword(LoginFormDTO loginFormDTO, HttpSession session) {
+        return null;
+    }
+
+    /**
+     * @description 电话登录 通过电话获取验证码
+     *
+     * @param phone
+     * @param session
+     * @return  true or false
+     */
+
+    @Override
+    public Result loginByPhone(String phone, HttpSession session) {
+        return null;
     }
 }

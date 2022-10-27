@@ -4,13 +4,12 @@ package com.lp.controller;
 import com.lp.dto.LoginFormDTO;
 import com.lp.dto.Result;
 import com.lp.service.UserService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
@@ -23,8 +22,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Result login(@RequestBody LoginFormDTO loginFormDTO, HttpSession session){
-        return userService.login(loginFormDTO , session);
+    public Result loginByPassword(@RequestBody LoginFormDTO loginFormDTO, HttpSession session){
+        return userService.loginByPassword(loginFormDTO , session);
+    }
+
+    @PostMapping("/login")
+    public Result loginByPassword(@RequestParam("phone") String phone , HttpSession session){
+        return userService.loginByPhone(phone,session);
     }
 
 }

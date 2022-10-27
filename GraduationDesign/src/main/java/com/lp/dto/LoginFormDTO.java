@@ -11,9 +11,7 @@ package com.lp.dto;
  */
 public class LoginFormDTO {
 
-    private Integer id;
+    private Integer phone;
 
     private String password;
-
-    private String code;            //验证码
 }

@@ -15,7 +15,10 @@ import javax.servlet.http.HttpSession;
  * @since 2022-10-27 16:30
  */
 public interface UserService {
-    Result login(LoginFormDTO loginFormDTO, HttpSession session);
 
     Result sendCode(String phone , HttpSession session);
+
+    Result loginByPassword(LoginFormDTO loginFormDTO, HttpSession session);
+
+    Result loginByPhone(String phone, HttpSession session);
 }

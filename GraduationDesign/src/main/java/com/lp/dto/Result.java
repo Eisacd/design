@@ -1,6 +1,7 @@
 package com.lp.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
  * @since 2022-10-27 16:41
  */
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Result {
