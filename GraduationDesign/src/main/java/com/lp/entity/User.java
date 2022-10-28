@@ -11,6 +11,16 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+/**
+ * @version v1.0
+ *
+ * @description 实体类 员工类
+ *
+ * @author lp
+ *
+ * @since 2022-10-28 16:21
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +34,8 @@ public class User {
     private Integer level;        //管理等级： 0：为普通员工  1：为管理人员
 
     private String name;           //名字
+
+    private String phone;       //电话
 
     @TableField(fill = FieldFill.INSERT)        //插入时进行填充
     private Date createTime;                //创建时间

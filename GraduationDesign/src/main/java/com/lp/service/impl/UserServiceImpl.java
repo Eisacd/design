@@ -1,9 +1,15 @@
 package com.lp.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.BeanUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lp.dto.LoginFormDTO;
 import com.lp.dto.Result;
+import com.lp.dto.UserDTO;
 import com.lp.entity.User;
 import com.lp.mapper.UserMapper;
 import com.lp.service.UserService;
@@ -13,10 +19,11 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.lp.utils.Constants.CODE_PREFIX;
-import static com.lp.utils.Constants.CODE_TTL;
+import static com.lp.utils.Constants.*;
 
 /**
  * @version v1.0
@@ -52,7 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
 
         //2.向电话发送信息 携带验证码
 
-        return Result.ok();
+        return Result.ok(code);
     }
 
     /**
@@ -65,6 +72,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
 
     @Override
     public Result loginByPassword(LoginFormDTO loginFormDTO, HttpSession session) {
-        return Result.ok();
+        //校验电话 密码
+        String phone = loginFormDTO.getPhone();
+        String password = loginFormDTO.getPassword();
+
+        //根据手机好 密码 查询
+        QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
+        User user = getOne(queryWrapper.eq("phone",phone).eq("password",password));
+
+        // 判断是否存在
+        if(user == null){
+            return Result.fail("无此用户");
+        }
+
+        //数据过滤 过滤掉不想给别人看到的数据
+        UserDTO userDTO = new UserDTO();
+        BeanUtil.copyProperties(user,userDTO);
+
+        //将userDTO 转为 map 放入hash缓存
+        Map<String,Object> userDTOMap = BeanUtil.beanToMap(userDTO,new HashMap<>(), CopyOptions.create()
+        .setIgnoreNullValue(true)
+        .setFieldValueEditor((fieldName , fieldValue) -> fieldValue.toString()));
+
+        //生产token 作为登录令牌
+        String token = UUID.randomUUID(true).toString(true);
+
+        //设置缓存 设置过期时间
+        stringRedisTemplate.opsForHash().putAll(LOGIN_PREFIX + token,userDTOMap);
+        stringRedisTemplate.expire(LOGIN_PREFIX + token ,LOGIN_TTL,TimeUnit.MINUTES);
+
+        return Result.ok(token);
     }
 }

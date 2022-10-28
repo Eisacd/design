@@ -29,4 +29,6 @@ public class UserDTO {
 
     private String name;           //名字
 
+    private String phone;
+
 }

@@ -9,6 +9,16 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+/**
+ * @version v1.0
+ *
+ * @description userController 员工控制层  登录相关功能
+ *
+ * @author lp
+ *
+ * @since 2022-10-28 16:23
+ */
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -23,7 +33,6 @@ public class UserController {
 
     @PostMapping("/login")
     public Result loginByPassword(@RequestBody LoginFormDTO loginFormDTO, HttpSession session){
-        System.out.println(loginFormDTO.toString());
         return userService.loginByPassword(loginFormDTO , session);
     }
 
