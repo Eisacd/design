@@ -1,5 +1,7 @@
 package com.lp.dto;
 
+import lombok.Data;
+
 /**
  * @version v1.0
  *
@@ -9,9 +11,10 @@ package com.lp.dto;
  *
  * @since 2022-10-27
  */
+@Data
 public class LoginFormDTO {
 
-    private Integer phone;
+    private String phone;
 
     private String password;
 }

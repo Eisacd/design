@@ -19,6 +19,4 @@ public interface UserService {
     Result sendCode(String phone , HttpSession session);
 
     Result loginByPassword(LoginFormDTO loginFormDTO, HttpSession session);
-
-    Result loginByPhone(String phone, HttpSession session);
 }
