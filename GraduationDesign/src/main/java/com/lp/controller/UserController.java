@@ -27,7 +27,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/code")
-    public Result sendCode(@RequestParam("phone") String phone , HttpSession session){
+    public Result sendCode(@RequestParam("phone") String phone , HttpSession session) throws Exception {
         return userService.sendCode(phone , session);
     }
 

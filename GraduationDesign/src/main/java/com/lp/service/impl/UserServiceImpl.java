@@ -13,6 +13,7 @@ import com.lp.dto.UserDTO;
 import com.lp.entity.User;
 import com.lp.mapper.UserMapper;
 import com.lp.service.UserService;
+import com.zhenzi.sms.ZhenziSmsClient;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 import static com.lp.utils.Constants.*;
 
 /**
- * @version v1.0
+ * @version v1.1
  *
  * @description user业务实现类
  *
@@ -49,7 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
      */
 
     @Override
-    public Result sendCode(String phone , HttpSession session) {
+    public Result sendCode(String phone , HttpSession session){
         //1.手机号作为key 验证码作为value 形成缓存
         //1.1 校验是否符合正规手机号
 
@@ -58,6 +59,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
         stringRedisTemplate.opsForValue().set(CODE_PREFIX + phone,code,CODE_TTL, TimeUnit.MINUTES);
 
         //2.向电话发送信息 携带验证码
+        //2.1 实例化 ZhenziSmsClient
+        ZhenziSmsClient client = new ZhenziSmsClient(ZHENZISMS_APIURL,ZHENZISMS_APPID,ZHENZISMS_APPSECRET);
+        //2.2 准备信息参数
+        Map<String , Object> params = new HashMap<>();
+        params.put("number",phone);
+        params.put("templateId",ZHENZISMS_TEMPLATEID);
+        String[] templateParams = new String[2];
+        templateParams[0] = code;
+        templateParams[1] = CODE_TTL.toString();
+        params.put("templateParams",templateParams);
+
+        try {
+            String result = client.send(params);
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
 
         return Result.ok(code);
     }

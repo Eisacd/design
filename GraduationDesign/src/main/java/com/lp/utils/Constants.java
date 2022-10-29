@@ -23,4 +23,13 @@ public class Constants {
 
     public static final String LOGIN_PREFIX = "cache:login:";   //登录缓存前缀
     public static final Integer LOGIN_TTL = 20;                 //token 有效期 在此时间 可凭借token进行登录 无需在此账密登录
+
+    /**
+     * ZhenZiSms
+     */
+
+    public static final String ZHENZISMS_APIURL = "https://sms_developer.zhenzikj.com";
+    public static final String ZHENZISMS_APPID = "112412";
+    public static final String ZHENZISMS_APPSECRET = "8af0c8f6-c7d4-4a57-9d8c-cc4c72c12ffc";
+    public static final String ZHENZISMS_TEMPLATEID = "10484";
 }
