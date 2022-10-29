@@ -56,7 +56,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
             //不符合
             return Result.fail("phone error");
         }
-
         //1.2 生产验证码 进行redis缓存
         String code = RandomUtil.randomNumbers(6);
         stringRedisTemplate.opsForValue().set(CODE_PREFIX + phone,code,CODE_TTL, TimeUnit.MINUTES);
