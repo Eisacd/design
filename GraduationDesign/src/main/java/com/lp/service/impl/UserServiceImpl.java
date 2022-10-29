@@ -5,7 +5,6 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.BeanUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lp.dto.LoginFormDTO;
 import com.lp.dto.Result;
@@ -13,13 +12,13 @@ import com.lp.dto.UserDTO;
 import com.lp.entity.User;
 import com.lp.mapper.UserMapper;
 import com.lp.service.UserService;
+import com.lp.utils.CheckPhone;
 import com.zhenzi.sms.ZhenziSmsClient;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +52,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
     public Result sendCode(String phone , HttpSession session){
         //1.手机号作为key 验证码作为value 形成缓存
         //1.1 校验是否符合正规手机号
+        if(!CheckPhone.isPhone(phone)){
+            //不符合
+            return Result.fail("phone error");
+        }
 
         //1.2 生产验证码 进行redis缓存
         String code = RandomUtil.randomNumbers(6);
@@ -69,16 +72,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
         templateParams[0] = code;
         templateParams[1] = CODE_TTL.toString();
         params.put("templateParams",templateParams);
-
         try {
+            //发送
             String result = client.send(params);
-            System.out.println(result);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
         return Result.ok(code);
     }
 

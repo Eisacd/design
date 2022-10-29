@@ -32,4 +32,10 @@ public class Constants {
     public static final String ZHENZISMS_APPID = "112412";
     public static final String ZHENZISMS_APPSECRET = "8af0c8f6-c7d4-4a57-9d8c-cc4c72c12ffc";
     public static final String ZHENZISMS_TEMPLATEID = "10484";
+
+    /**
+     * REGEX
+     */
+
+    public static final String REGEX_PHONE = "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$";
 }
