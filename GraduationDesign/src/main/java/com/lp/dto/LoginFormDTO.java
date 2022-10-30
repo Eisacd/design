@@ -17,4 +17,6 @@ public class LoginFormDTO {
     private String phone;
 
     private String password;
+
+    private String code;
 }

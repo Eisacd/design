@@ -33,8 +33,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Result loginByPassword(@RequestBody LoginFormDTO loginFormDTO, HttpSession session){
-        return userService.loginByPassword(loginFormDTO , session);
+    public Result login(@RequestBody LoginFormDTO loginFormDTO, HttpSession session){
+        return userService.loginByCode(loginFormDTO , session);
     }
 
 }

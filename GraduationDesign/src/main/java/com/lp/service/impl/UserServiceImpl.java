@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lp.dto.LoginFormDTO;
@@ -13,6 +14,7 @@ import com.lp.entity.User;
 import com.lp.mapper.UserMapper;
 import com.lp.service.UserService;
 import com.lp.utils.CheckPhone;
+import com.lp.utils.MakeRedisLoginCache;
 import com.zhenzi.sms.ZhenziSmsClient;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import static com.lp.utils.Constants.*;
@@ -59,7 +62,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
         //1.2 生产验证码 进行redis缓存
         String code = RandomUtil.randomNumbers(6);
         stringRedisTemplate.opsForValue().set(CODE_PREFIX + phone,code,CODE_TTL, TimeUnit.MINUTES);
-
         //2.向电话发送信息 携带验证码
         //2.1 实例化 ZhenziSmsClient
         ZhenziSmsClient client = new ZhenziSmsClient(ZHENZISMS_APIURL,ZHENZISMS_APPID,ZHENZISMS_APPSECRET);
@@ -85,7 +87,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
      *
      * @param loginFormDTO
      * @param session
-     * @return  true or false
+     * @return  true or false and token
      */
 
     @Override
@@ -103,22 +105,47 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
             return Result.fail("无此用户");
         }
 
-        //数据过滤 过滤掉不想给别人看到的数据
-        UserDTO userDTO = new UserDTO();
-        BeanUtil.copyProperties(user,userDTO);
+        String token = new MakeRedisLoginCache(stringRedisTemplate,user).buildRedisCacheAndToken();
 
-        //将userDTO 转为 map 放入hash缓存
-        Map<String,Object> userDTOMap = BeanUtil.beanToMap(userDTO,new HashMap<>(), CopyOptions.create()
-        .setIgnoreNullValue(true)
-        .setFieldValueEditor((fieldName , fieldValue) -> fieldValue.toString()));
+        return Result.ok(token);
+    }
 
-        //生产token 作为登录令牌
-        String token = UUID.randomUUID(true).toString(true);
+    /**
+     * @description 手机号获取验证码 手机号 + 验证码 进行登录
+     *
+     * @param loginFormDTO
+     * @param session
+     * @return true or false and token
+     */
 
-        //设置缓存 设置过期时间
-        stringRedisTemplate.opsForHash().putAll(LOGIN_PREFIX + token,userDTOMap);
-        stringRedisTemplate.expire(LOGIN_PREFIX + token ,LOGIN_TTL,TimeUnit.MINUTES);
+    @Override
+    public Result loginByCode(LoginFormDTO loginFormDTO, HttpSession session) {
+        //判断手机号与code是否为空
+        String phone = loginFormDTO.getPhone();
+        String code = loginFormDTO.getCode();
+        if(StrUtil.isBlank(phone) || StrUtil.isBlank(code)){
+            return Result.fail("Info error");
+        }
+        //根据手机号获取redis
+        String codeCache = stringRedisTemplate.opsForValue().get(CODE_PREFIX + loginFormDTO.getPhone());
 
+        if(StrUtil.isBlank(codeCache)){
+            return Result.fail("no have codeCache");
+        }
+        //对比code
+        if(!code.equals(codeCache)){
+            Result.fail("code error");
+        }
+        //登陆成功 记录信息
+        User user = getOne(new QueryWrapper<User>().eq("phone",phone));
+
+        if(user == null){
+            return Result.fail("understand error");
+        }
+
+        String token = new MakeRedisLoginCache(stringRedisTemplate,user).buildRedisCacheAndToken();
+
+        //返回token 前端访问需此
         return Result.ok(token);
     }
 }
