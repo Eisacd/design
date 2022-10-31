@@ -37,6 +37,10 @@ public class User {
 
     private String phone;       //电话
 
+    private Integer departmentId;
+
+    private Integer postId;
+
     @TableField(fill = FieldFill.INSERT)        //插入时进行填充
     private Date createTime;                //创建时间
 

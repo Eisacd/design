@@ -31,4 +31,8 @@ public class UserDTO {
 
     private String phone;
 
+    private Integer departmentId;
+
+    private Integer postId;
+
 }

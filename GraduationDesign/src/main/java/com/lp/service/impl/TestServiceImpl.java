@@ -22,4 +22,5 @@ public class TestServiceImpl implements TestService {
 
         return Result.ok(user);
     }
+
 }

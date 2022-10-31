@@ -21,22 +21,22 @@ import javax.annotation.Resource;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-
-        //登录拦截器
-        registry.addInterceptor(new LoginInterceptor())
-                .excludePathPatterns(
-                        "/user/**"
-                ).order(1);
-
-        //token刷新 目的 ： 刷新token 不拦截
-        registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate))
-                .addPathPatterns("/**")
-                .order(0);
-    }
+//
+//    @Resource
+//    private StringRedisTemplate stringRedisTemplate;
+//
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//
+//        //登录拦截器
+//        registry.addInterceptor(new LoginInterceptor())
+//                .excludePathPatterns(
+//                        "/user/**"
+//                ).order(1);
+//
+//        //token刷新 目的 ： 刷新token 不拦截
+//        registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate))
+//                .addPathPatterns("/**")
+//                .order(0);
+//    }
 }

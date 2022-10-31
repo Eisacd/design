@@ -1,8 +1,6 @@
 package com.lp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -21,9 +19,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import static com.lp.utils.Constants.*;
@@ -147,5 +146,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
 
         //返回token 前端访问需此
         return Result.ok(token);
+    }
+
+    @Override
+    public Result getPersonByDepartmentId(Integer departmentId, HttpSession session) {
+        //判断
+        if(departmentId == null){
+            return Result.fail("department error");
+        }
+        //从数据库获取数据
+        List<Map<String,Object>> list = listMaps(new QueryWrapper<User>().eq("department_id", departmentId));
+        //过滤一些数据
+        List<UserDTO> listUserDTO = new ArrayList<>();
+
+        UserDTO userDTO;
+
+        for(Map<String,Object> map : list){
+            userDTO = BeanUtil.fillBeanWithMap(map,new UserDTO(),false);
+            listUserDTO.add(userDTO);
+        }
+        return Result.ok(listUserDTO);
     }
 }

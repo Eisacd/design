@@ -21,4 +21,6 @@ public interface UserService {
     Result loginByPassword(LoginFormDTO loginFormDTO, HttpSession session);
 
     Result loginByCode(LoginFormDTO loginFormDTO , HttpSession session);
+
+    Result getPersonByDepartmentId(Integer departmentId , HttpSession session);
 }
