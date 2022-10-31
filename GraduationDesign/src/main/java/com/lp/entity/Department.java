@@ -2,9 +2,12 @@ package com.lp.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.lp.entity.vo.UserVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * @version v1.0
@@ -25,4 +28,5 @@ public class Department {
     private Integer departmentId;
 
     private String departmentName;
+
 }

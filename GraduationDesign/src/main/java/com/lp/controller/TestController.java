@@ -2,6 +2,7 @@ package com.lp.controller;
 
 
 import com.lp.dto.Result;
+import com.lp.mapper.UserMapper;
 import com.lp.service.TestService;
 import com.lp.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,11 @@ public class TestController {
     @GetMapping("/{departmentId}")
     public Result test1(@PathVariable("departmentId") Integer departmentId , HttpSession session){
         return userService.getPersonByDepartmentId(departmentId , session);
+    }
+
+    @PostMapping("/mapper")
+    public Result test2(@RequestParam("departmentName") String departmentName , HttpSession session){
+        return userService.getAllPersonUseDepartmentName(departmentName, session);
     }
 
 }

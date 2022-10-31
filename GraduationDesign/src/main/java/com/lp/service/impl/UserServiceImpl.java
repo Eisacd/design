@@ -9,11 +9,13 @@ import com.lp.dto.LoginFormDTO;
 import com.lp.dto.Result;
 import com.lp.dto.UserDTO;
 import com.lp.entity.User;
+import com.lp.entity.vo.UserVo;
 import com.lp.mapper.UserMapper;
 import com.lp.service.UserService;
 import com.lp.utils.CheckPhone;
 import com.lp.utils.MakeRedisLoginCache;
 import com.zhenzi.sms.ZhenziSmsClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -166,5 +168,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
             listUserDTO.add(userDTO);
         }
         return Result.ok(listUserDTO);
+    }
+
+    @Resource
+    private UserMapper userMapper;
+
+    @Override
+    public Result getAllPersonUseDepartmentName(String departmentName, HttpSession session) {
+        List<UserVo> userVoList = userMapper.getAllPersonUseDepartmentName(departmentName, session);
+        return Result.ok(userVoList);
     }
 }
