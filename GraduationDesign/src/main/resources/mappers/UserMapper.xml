@@ -3,15 +3,13 @@
 <mapper namespace="com.lp.mapper.UserMapper">
 
     <select id="getAllPersonUseDepartmentName" resultMap="listPersonForDepartment">
-        select 
---                id,
---                department_name
-                *
-        from user , department
-        where user.department_id = department.department_id
-        and department.department_name = #{departmentName}
+        select
+              *
+        from (post left join user
+            on post.post_id = user.post_id) left join department
+            on user.department_id = department.department_id
+        where department.department_name = #{departmentName}
     </select>
-
     <resultMap id="listPersonForDepartment"  type="com.lp.entity.vo.UserVo">
     </resultMap>
 </mapper>

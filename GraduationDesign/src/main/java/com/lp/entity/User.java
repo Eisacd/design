@@ -1,10 +1,8 @@
 package com.lp.entity;
 
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,6 +52,7 @@ public class User {
     private Integer updateBy;               //被谁更新(记录被更新人id)
 
     @TableField(fill = FieldFill.INSERT)
+    @TableLogic
     private Integer deleteFlag;             //是否被删除
 
     @TableField(fill = FieldFill.INSERT)
