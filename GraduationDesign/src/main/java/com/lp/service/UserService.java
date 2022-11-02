@@ -22,7 +22,7 @@ public interface UserService {
 
     Result loginByCode(LoginFormDTO loginFormDTO , HttpSession session);
 
-    Result getPersonByDepartmentId(Integer departmentId , HttpSession session);
+    Result getAllPersonByDepartmentId(Integer departmentId , HttpSession session);
 
     Result getAllPersonUseDepartmentName(String departmentName , HttpSession session);
 }

@@ -7,13 +7,18 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lp.dto.Result;
 import com.lp.entity.Department;
+import com.lp.entity.User;
+import com.lp.entity.vo.DepartmentVo;
 import com.lp.mapper.DepartmentMapper;
+import com.lp.mapper.UserMapper;
 import com.lp.service.DepartmentService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @version v1.0
@@ -104,5 +109,29 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper , Depart
         List<Department> list = list(wrapper);
 
         return Result.ok(list);
+    }
+
+    /**
+     * @description 查询一个部门的所有人
+     * @param
+     * @return
+     */
+
+    @Resource
+    private UserMapper userMapper;
+
+    @Override
+    public Result getAllPersonForAllDepartmentName() {
+        //判断
+        List<Department> departmentList = list(new QueryWrapper<Department>());
+
+        List<DepartmentVo> departmentVoList = departmentList.stream().map(department ->{
+            DepartmentVo departmentVo = new DepartmentVo();
+            BeanUtil.copyProperties(department,departmentVo);
+            departmentVo.setUsers(userMapper.selectList(new QueryWrapper<User>().eq("department_id",departmentVo.getDepartmentId())));
+            return departmentVo;
+        }).collect(Collectors.toList());
+
+        return Result.ok(departmentVoList);
     }
 }

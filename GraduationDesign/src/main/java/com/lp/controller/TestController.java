@@ -2,7 +2,9 @@ package com.lp.controller;
 
 
 import com.lp.dto.Result;
+import com.lp.entity.Department;
 import com.lp.mapper.UserMapper;
+import com.lp.service.DepartmentService;
 import com.lp.service.TestService;
 import com.lp.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +23,12 @@ public class TestController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private DepartmentService departmentService;
+
     @GetMapping("/{departmentId}")
     public Result test1(@PathVariable("departmentId") Integer departmentId , HttpSession session){
-        return userService.getPersonByDepartmentId(departmentId , session);
+        return userService.getAllPersonByDepartmentId(departmentId , session);
     }
 
     @PostMapping("/mapper")
@@ -31,4 +36,8 @@ public class TestController {
         return userService.getAllPersonUseDepartmentName(departmentName, session);
     }
 
+    @PostMapping("/d")
+    public Result test3(@RequestBody Department department){
+        return departmentService.getAllPersonForAllDepartmentName();
+    }
 }

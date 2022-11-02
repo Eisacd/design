@@ -151,7 +151,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
     }
 
     @Override
-    public Result getPersonByDepartmentId(Integer departmentId, HttpSession session) {
+    public Result getAllPersonByDepartmentId(Integer departmentId, HttpSession session) {
         //判断
         if(departmentId == null){
             return Result.fail("department error");
