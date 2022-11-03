@@ -27,4 +27,6 @@ public class Post {
     private String postName;
 
     private Integer departmentId;   //属于那个部门
+
+
 }

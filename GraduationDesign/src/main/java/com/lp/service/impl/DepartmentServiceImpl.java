@@ -121,14 +121,15 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper , Depart
     private UserMapper userMapper;
 
     @Override
-    public Result getAllPersonForAllDepartmentName() {
+    public Result getAllPersonForAllDepartment() {
+        QueryWrapper<Department> queryWrapper = new QueryWrapper<>();
         //判断
-        List<Department> departmentList = list(new QueryWrapper<Department>());
+        List<Department> departmentList = list(queryWrapper);
 
         List<DepartmentVo> departmentVoList = departmentList.stream().map(department ->{
             DepartmentVo departmentVo = new DepartmentVo();
             BeanUtil.copyProperties(department,departmentVo);
-            departmentVo.setUsers(userMapper.selectList(new QueryWrapper<User>().eq("department_id",departmentVo.getDepartmentId())));
+            departmentVo.setDepartmentUsers(userMapper.selectList(new QueryWrapper<User>().eq("department_id",departmentVo.getDepartmentId())));
             return departmentVo;
         }).collect(Collectors.toList());
 

@@ -28,5 +28,5 @@ public interface DepartmentService {
 
     Result getDepartmentsUseLike(Department department);
 
-    Result getAllPersonForAllDepartmentName();
+    Result getAllPersonForAllDepartment();
 }
