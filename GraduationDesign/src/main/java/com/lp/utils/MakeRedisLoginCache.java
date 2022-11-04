@@ -31,22 +31,18 @@ public class MakeRedisLoginCache {
     }
 
     public String buildRedisCacheAndToken(){
-//        //过滤信息
-//        User user = new User();
-//        BeanUtil.copyProperties(user,);
-//
-//        //将userDTO的信息存入redis
-//        //形成map
-//        Map<String,Object> userDTOMap = BeanUtil.beanToMap(userDTO,new HashMap<>(), CopyOptions.create()
-//                .setIgnoreNullValue(true)
-//                .setFieldValueEditor((fieldName , fieldValue) -> fieldValue.toString()));
-//
-//        //形成token uuid
-//        String token = UUID.randomUUID(true).toString(true);
-//        //redis cache and cache ttl
-//        stringRedisTemplate.opsForHash().putAll(LOGIN_PREFIX + token,userDTOMap);
-//        stringRedisTemplate.expire(LOGIN_PREFIX + token,LOGIN_TTL,TimeUnit.MINUTES);
-//        return token;
-        return "";
+
+        //将user的信息存入redis
+        //形成map
+        Map<String,Object> userMap = BeanUtil.beanToMap(user,new HashMap<>(), CopyOptions.create()
+                .setIgnoreNullValue(true)
+                .setFieldValueEditor((fieldName , fieldValue) -> fieldValue.toString()));
+
+        //形成token uuid
+        String token = UUID.randomUUID(true).toString(true);
+        //redis cache and cache ttl
+        stringRedisTemplate.opsForHash().putAll(LOGIN_PREFIX + token,userMap);
+        stringRedisTemplate.expire(LOGIN_PREFIX + token,LOGIN_TTL,TimeUnit.MINUTES);
+        return token;
     }
 }

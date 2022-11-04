@@ -16,7 +16,9 @@ import com.lp.service.PostService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.lp.utils.Constants.DATABASE_POST_ID;
@@ -44,6 +46,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper , Post> implements P
     private Post selectPostById(Post post){
         return getById(post.getPostId());
     }
+
+    private Post selectPostByColumns(Post post){
+        Map<String  , Object> map = new HashMap<>();
+        BeanUtil.beanToMap(post,map,false,true);
+        return getOne(new QueryWrapper<Post>().allEq(map));
+    }
+
 
 
     private List<Post> selectPostsByIds(List<Post> list){
@@ -80,7 +89,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper , Post> implements P
         return removeById(post.getPostId());
     }
 
-    private boolean delPosts(List<Post> list){
+    private boolean delPostsByIds(List<Post> list){
         List<Integer> ids = list.stream().map(post -> {
             Integer id = post.getPostId();
             return id;

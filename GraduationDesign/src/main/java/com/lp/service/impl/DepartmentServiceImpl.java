@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.lp.utils.Constants.*;
@@ -45,6 +47,11 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper , Depart
         return getById(department.getDepartmentId());
     }
 
+    private Department selectDepartmentByColumns(Department department){
+        Map<String  , Object> map = new HashMap<>();
+        BeanUtil.beanToMap(department,map,false,true);
+        return getOne(new QueryWrapper<Department>().allEq(map));
+    }
 
     private List<Department> selectDepartmentsByIds(List<Department> list){
         List<Integer> ids = list.stream().map(department -> {
@@ -61,7 +68,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper , Depart
         return save(department);
     }
 
-    private boolean addUsers(List<Department> departments){
+    private boolean addDepartments(List<Department> departments){
         return saveBatch(departments);
     }
 
@@ -80,8 +87,8 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper , Depart
         return removeById(department.getDepartmentId());
     }
 
-    private boolean delDepartments(List<Department> departments){
-        List<Integer> ids = departments.stream().map(department -> {
+    private boolean delDepartmentsByIds(List<Department> list){
+        List<Integer> ids = list.stream().map(department -> {
             Integer id = department.getDepartmentId();
             return id;
         }).collect(Collectors.toList());

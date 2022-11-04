@@ -55,7 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
         return getById(user.getId());
     }
 
-    private User selectUserByColumn(User user){
+    private User selectUserByColumns(User user){
         Map<String  , Object> map = new HashMap<>();
         BeanUtil.beanToMap(user,map,false,true);
         return getOne(new QueryWrapper<User>().allEq(map));
@@ -99,8 +99,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
         return removeById(user.getId());
     }
 
-    private boolean delUsers(List<User> users){
-        List<Integer> ids = users.stream().map(user -> {
+    private boolean delUsersByIds(List<User> list){
+        List<Integer> ids = list.stream().map(user -> {
             Integer id = user.getId();
             return id;
         }).collect(Collectors.toList());
@@ -170,7 +170,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
         User userInfo = new User();
         userInfo.setPassword(password);
         userInfo.setPhone(phone);
-        User user = selectUserByColumn(userInfo);
+        User user = selectUserByColumns(userInfo);
 
         // 判断是否存在
         if(user == null){

@@ -33,7 +33,7 @@ public class DepartmentController {
 
     @PostMapping("/add")
     public Result addDepartment(@RequestBody Department department ){
-        return departmentService.addDepartment(department);
+        return departmentService.saveDepartment(department);
     }
 
     /**

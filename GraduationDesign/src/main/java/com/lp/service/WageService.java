@@ -1,5 +1,7 @@
 package com.lp.service;
 
+import com.lp.dto.Result;
+
 /**
  * @version v1.0
  *
@@ -11,4 +13,5 @@ package com.lp.service;
  */
 
 public interface WageService {
+    Result getAllUsersForAllWages();
 }

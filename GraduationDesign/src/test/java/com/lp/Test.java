@@ -2,7 +2,9 @@ package com.lp;
 
 import com.lp.entity.User;
 import com.lp.service.UserService;
+import com.lp.service.WageService;
 import com.lp.service.impl.UserServiceImpl;
+import com.lp.service.impl.WageServiceImpl;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
@@ -16,6 +18,9 @@ public class Test {
     @Resource
     private UserServiceImpl userServiceImpl;
 
+    @Resource
+    private WageServiceImpl wageServiceImpl;
+
    @org.junit.jupiter.api.Test
     public void t(){
        User user1 = new User();
@@ -26,6 +31,7 @@ public class Test {
        list.add(user1);
        list.add(user2);
 
+       System.out.println(wageServiceImpl.getAllUsersForAllWages());
 
 
        System.out.println("---");
