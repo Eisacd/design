@@ -2,7 +2,7 @@ package com.lp.interceptor;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
-import com.lp.dto.UserDTO;
+import com.lp.entity.User;
 import com.lp.utils.UserHolder;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -54,10 +54,10 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
         }
         //存在用户 将对缓存进行刷新
         //将map装还我userDTO
-        UserDTO userDTO = BeanUtil.fillBeanWithMap(map,new UserDTO(),false);
+        User user = BeanUtil.fillBeanWithMap(map,new User(),false);
 
         //进行缓存
-        UserHolder.saveUser(userDTO);
+        UserHolder.saveUser(user);
         //刷新token有效时间
         stringRedisTemplate.expire(LOGIN_PREFIX + token , LOGIN_TTL , TimeUnit.MINUTES);
         //放行

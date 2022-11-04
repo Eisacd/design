@@ -1,6 +1,8 @@
 package com.lp.entity.vo;
 
-import com.lp.dto.UserDTO;
+import com.lp.entity.Attendance;
+import com.lp.entity.User;
+import com.lp.entity.Wage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserVo extends UserDTO {
+public class UserVo extends User {
 
     /**
      * 一个员工只能属于一个部门
@@ -29,5 +31,15 @@ public class UserVo extends UserDTO {
      * 一个员工只能属于一个岗位
      */
     private String postName;
+
+    /**
+     * 一个员工一个工资项
+     */
+    private Wage wage;
+
+    /**
+     * 一个员工一个考勤
+     */
+    private Attendance attendance;
 
 }

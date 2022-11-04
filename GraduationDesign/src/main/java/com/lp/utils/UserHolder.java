@@ -1,6 +1,6 @@
 package com.lp.utils;
 
-import com.lp.dto.UserDTO;
+import com.lp.entity.User;
 
 /**
  * @version v1.0
@@ -13,13 +13,13 @@ import com.lp.dto.UserDTO;
  */
 
 public class UserHolder {
-    public static final ThreadLocal<UserDTO> tl = new ThreadLocal<UserDTO>();
+    public static final ThreadLocal<User> tl = new ThreadLocal<User>();
 
-    public static void saveUser(UserDTO userDTO){
+    public static void saveUser(User userDTO){
         tl.set(userDTO);
     }
 
-    public static UserDTO getUser(){
+    public static User getUser(){
         return tl.get();
     }
 

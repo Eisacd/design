@@ -15,10 +15,11 @@ import com.lp.service.DepartmentService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
+import static com.lp.utils.Constants.*;
 
 /**
  * @version v1.0
@@ -33,6 +34,64 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper , Department> implements DepartmentService {
 
+
+    /**
+     * Unit Select
+     */
+    /**
+     * 查询部门
+     */
+    private Department selectDepartmentById(Department department){
+        return getById(department.getDepartmentId());
+    }
+
+
+    private List<Department> selectDepartmentsByIds(List<Department> list){
+        List<Integer> ids = list.stream().map(department -> {
+            Integer id = department.getDepartmentId();
+            return id;
+        }).collect(Collectors.toList());
+        return (List<Department>) listByIds(ids);
+    }
+
+    /**
+     * Unit Add
+     */
+    private boolean addDepartment(Department department){
+        return save(department);
+    }
+
+    private boolean addUsers(List<Department> departments){
+        return saveBatch(departments);
+    }
+
+    /**
+     * Unit Update
+     */
+    private boolean updateDepartmentById(Department department){
+        return updateById(department);
+    }
+
+    /**
+     * Unit Delete
+     */
+
+    private boolean delDepartmentById(Department department){
+        return removeById(department.getDepartmentId());
+    }
+
+    private boolean delDepartments(List<Department> departments){
+        List<Integer> ids = departments.stream().map(department -> {
+            Integer id = department.getDepartmentId();
+            return id;
+        }).collect(Collectors.toList());
+        return removeByIds(ids);
+    }
+
+
+
+
+
     /**
      * @Description 添加部门
      *
@@ -41,7 +100,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper , Depart
      */
 
     @Override
-    public Result addDepartment(Department department) {
+    public Result saveDepartment(Department department) {
         //判断核心 id name
         if (StrUtil.isBlank(department.getDepartmentName())) {
             return Result.fail("Info error");
@@ -129,10 +188,45 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper , Depart
         List<DepartmentVo> departmentVoList = departmentList.stream().map(department ->{
             DepartmentVo departmentVo = new DepartmentVo();
             BeanUtil.copyProperties(department,departmentVo);
-            departmentVo.setDepartmentUsers(userMapper.selectList(new QueryWrapper<User>().eq("department_id",departmentVo.getDepartmentId())));
+            List<User> userList = (userMapper.selectList(new QueryWrapper<User>().eq(DATABASE_DEPARTMENT_ID,departmentVo.getDepartmentId())));
+            departmentVo.setDepartmentUsers(userList);
             return departmentVo;
         }).collect(Collectors.toList());
 
         return Result.ok(departmentVoList);
     }
+
+
+    /**
+     * 添加部门
+     */
+    private boolean Department(Department department){
+        return save(department);
+    }
+    /**
+     * 修改 部门信息
+     */
+    private boolean updateDepartment(Department department){
+        return updateById(department);
+    }
+    /**
+     * 删除部门
+     */
+    private boolean deleteDepartment(Department department){
+        return removeById(department.getDepartmentId());
+    }
+    /**
+     * 查询某个部门
+     */
+    private Department selectOneForDepartmentsById(Department department){
+        return getById(department.getDepartmentId());
+    }
+    /**
+     *根据名字查询部门
+     */
+    private List<Department> selectOneForDepartmentsByName(Department department){
+        return list(new QueryWrapper<Department>().eq(DATABASE_DEPARTMENT_NAME,department.getDepartmentName()));
+    }
+
+
 }

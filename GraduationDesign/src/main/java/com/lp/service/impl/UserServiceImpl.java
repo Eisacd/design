@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lp.dto.LoginFormDTO;
 import com.lp.dto.Result;
-import com.lp.dto.UserDTO;
 import com.lp.entity.User;
 import com.lp.entity.vo.UserVo;
 import com.lp.mapper.UserMapper;
@@ -15,7 +14,6 @@ import com.lp.service.UserService;
 import com.lp.utils.CheckPhone;
 import com.lp.utils.MakeRedisLoginCache;
 import com.zhenzi.sms.ZhenziSmsClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.lp.utils.Constants.*;
 
@@ -44,6 +43,76 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+
+    /**
+     * Uint select
+     */
+
+    /**
+     * 查询员工
+     */
+    private User selectUserById(User user){
+        return getById(user.getId());
+    }
+
+    private User selectUserByColumn(User user){
+        Map<String  , Object> map = new HashMap<>();
+        BeanUtil.beanToMap(user,map,false,true);
+        return getOne(new QueryWrapper<User>().allEq(map));
+    }
+
+    private List<User> selectUsersByIds(List<User> users){
+        List<Integer> ids = users.stream().map(user -> {
+            Integer id = user.getId();
+            return id;
+        }).collect(Collectors.toList());
+        return (List<User>) listByIds(ids);
+    }
+
+    /**
+     * Unit Add
+     */
+
+    /**
+     * 添加员工
+     */
+    private boolean addOneUser(User user){
+        return save(user);
+    }
+
+    private boolean addUsers(List<User> users){
+        return saveBatch(users);
+    }
+
+    /**
+     * Unit Update
+     */
+    private boolean updateUserById(User user){
+        return updateById(user);
+    }
+
+    /**
+     * Unit Delete
+     */
+
+    private boolean delUserById(User user){
+        return removeById(user.getId());
+    }
+
+    private boolean delUsers(List<User> users){
+        List<Integer> ids = users.stream().map(user -> {
+            Integer id = user.getId();
+            return id;
+        }).collect(Collectors.toList());
+        return removeByIds(ids);
+    }
+
+
+
+
+
+
+
 
     /**
      * @description 发送验证码
@@ -98,8 +167,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
         String password = loginFormDTO.getPassword();
 
         //根据手机好 密码 查询
-        QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
-        User user = getOne(queryWrapper.eq("phone",phone).eq("password",password));
+        User userInfo = new User();
+        userInfo.setPassword(password);
+        userInfo.setPhone(phone);
+        User user = selectUserByColumn(userInfo);
 
         // 判断是否存在
         if(user == null){
@@ -157,15 +228,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
             return Result.fail("department error");
         }
         //从数据库获取数据
-        List<Map<String,Object>> list = listMaps(new QueryWrapper<User>().eq("department_id", departmentId));
+        List<Map<String,Object>> list = listMaps(new QueryWrapper<User>().eq(DATABASE_DEPARTMENT_ID, departmentId));
         //过滤一些数据
-        List<UserDTO> listUserDTO = new ArrayList<>();
+        List<User> listUserDTO = new ArrayList<>();
 
-        UserDTO userDTO;
+        User user;
 
         for(Map<String,Object> map : list){
-            userDTO = BeanUtil.fillBeanWithMap(map,new UserDTO(),false);
-            listUserDTO.add(userDTO);
+            user = BeanUtil.fillBeanWithMap(map,new User(),false);
+            listUserDTO.add(user);
         }
         return Result.ok(listUserDTO);
     }
@@ -178,4 +249,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
         List<UserVo> userVoList = userMapper.getAllPersonUseDepartmentName(departmentName, session);
         return Result.ok(userVoList);
     }
+
 }

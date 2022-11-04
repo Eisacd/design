@@ -1,8 +1,7 @@
 package com.lp.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lp.dto.Result;
-import com.lp.dto.UserDTO;
+import com.lp.entity.User;
 import com.lp.service.TestService;
 import com.lp.utils.UserHolder;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public Result test1() {
-        UserDTO user = new UserDTO();
+        User user = new User();
         user = UserHolder.getUser();
         System.out.println(user);
 

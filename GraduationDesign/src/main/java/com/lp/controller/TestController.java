@@ -2,14 +2,11 @@ package com.lp.controller;
 
 
 import com.lp.dto.Result;
-import com.lp.entity.Department;
-import com.lp.mapper.PostMapper;
-import com.lp.mapper.UserMapper;
+import com.lp.entity.Post;
 import com.lp.service.DepartmentService;
 import com.lp.service.PostService;
 import com.lp.service.TestService;
 import com.lp.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -42,8 +39,9 @@ public class TestController {
     }
 
     @PostMapping("/d")
-    public Result test3(@RequestBody Department department){
-//        return departmentService.getAllPersonForAllDepartment();
-        return postService.getPersonForPost();
+    public Result test3(@RequestBody Post post){
+        return departmentService.getAllPersonForAllDepartment();
+//        return postService.getPersonForPost();
+//        return postService.getPersonForOnePost(postDTO);
     }
 }

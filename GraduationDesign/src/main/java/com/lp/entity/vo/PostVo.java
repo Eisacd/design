@@ -1,6 +1,6 @@
 package com.lp.entity.vo;
 
-import com.lp.dto.PostDTO;
+import com.lp.entity.Post;
 import com.lp.entity.User;
 import lombok.Data;
 
@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 @Data
-public class PostVo extends PostDTO {
+public class PostVo extends Post {
 
     /**
      * post user 一对一关系

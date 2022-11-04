@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 public interface DepartmentService {
-    Result addDepartment(Department department);
+    Result saveDepartment(Department department);
 
     Result getAllDepartmentInfo();
 

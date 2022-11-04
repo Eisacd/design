@@ -3,7 +3,6 @@ package com.lp.utils;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
-import com.lp.dto.UserDTO;
 import com.lp.entity.User;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
@@ -32,21 +31,22 @@ public class MakeRedisLoginCache {
     }
 
     public String buildRedisCacheAndToken(){
-        //过滤信息
-        UserDTO userDTO = new UserDTO();
-        BeanUtil.copyProperties(user,userDTO);
-
-        //将userDTO的信息存入redis
-        //形成map
-        Map<String,Object> userDTOMap = BeanUtil.beanToMap(userDTO,new HashMap<>(), CopyOptions.create()
-                .setIgnoreNullValue(true)
-                .setFieldValueEditor((fieldName , fieldValue) -> fieldValue.toString()));
-
-        //形成token uuid
-        String token = UUID.randomUUID(true).toString(true);
-        //redis cache and cache ttl
-        stringRedisTemplate.opsForHash().putAll(LOGIN_PREFIX + token,userDTOMap);
-        stringRedisTemplate.expire(LOGIN_PREFIX + token,LOGIN_TTL,TimeUnit.MINUTES);
-        return token;
+//        //过滤信息
+//        User user = new User();
+//        BeanUtil.copyProperties(user,);
+//
+//        //将userDTO的信息存入redis
+//        //形成map
+//        Map<String,Object> userDTOMap = BeanUtil.beanToMap(userDTO,new HashMap<>(), CopyOptions.create()
+//                .setIgnoreNullValue(true)
+//                .setFieldValueEditor((fieldName , fieldValue) -> fieldValue.toString()));
+//
+//        //形成token uuid
+//        String token = UUID.randomUUID(true).toString(true);
+//        //redis cache and cache ttl
+//        stringRedisTemplate.opsForHash().putAll(LOGIN_PREFIX + token,userDTOMap);
+//        stringRedisTemplate.expire(LOGIN_PREFIX + token,LOGIN_TTL,TimeUnit.MINUTES);
+//        return token;
+        return "";
     }
 }

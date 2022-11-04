@@ -34,8 +34,43 @@ public class Constants {
     public static final String ZHENZISMS_TEMPLATEID = "10484";
 
     /**
-     * REGEX
+     * REGEX 校验
      */
 
     public static final String REGEX_PHONE = "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$";
+
+
+    /**
+     * database 数据库
+     */
+
+    /**
+     * Table post
+     */
+    public static final String DATABASE_POST_NAME = "post_name";
+    public static final String DATABASE_POST_ID = "post_id";
+
+    /**
+     * Table department
+     */
+    public static final String DATABASE_DEPARTMENT_ID = "department_id";
+    public static final String DATABASE_DEPARTMENT_NAME = "department_name";
+
+    /**
+     * Table user
+     */
+    public static final String DATABASE_USER_ID = "user_id";
+    public static final String DATABASE_USER_Name = "user_name";
+
+    /**
+     * Table wage
+     */
+    public static final String DATABASE_WAGE_ID = "wage_id";
+    public static final String DATABASE_WAGE_NAME = "wage_name";
+
+    /**
+     * Table attendance
+     */
+    public static final String DATABASE_ATTENDANCE_ID = "attendance_id";
+    public static final String DATABASE_ATTENDANCE_NAME = "attendance_name";
 }
